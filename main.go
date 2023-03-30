@@ -9,8 +9,22 @@ import (
 
 func main() {
 	client := openai.NewClient("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")
-	resp, err := client.CreateChatCompletion(
-		context.Background(),
+
+	ctx := context.Background()
+
+	req := openai.AudioRequest{
+		Model:    openai.Whisper1,
+		FilePath: "recording.mp3",
+	}
+	resp, err := client.CreateTranscription(ctx, req)
+	if err != nil {
+		fmt.Printf("Transcription error: %v\n", err)
+		return
+	}
+	fmt.Println(resp.Text)
+
+	res, err := client.CreateChatCompletion(
+		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
 			Messages: []openai.ChatCompletionMessage{
@@ -27,5 +41,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(resp.Choices[0].Message.Content)
+	fmt.Println(res.Choices[0].Message.Content)
 }
