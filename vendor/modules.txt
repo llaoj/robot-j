@@ -4,3 +4,6 @@ github.com/gorilla/websocket
 # github.com/sashabaranov/go-openai v1.5.7
 ## explicit; go 1.18
 github.com/sashabaranov/go-openai
+# gopkg.in/yaml.v2 v2.4.0
+## explicit; go 1.15
+gopkg.in/yaml.v2

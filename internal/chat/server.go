@@ -8,17 +8,20 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/llaoj/robot-j/internal/GPT"
+	"github.com/llaoj/robot-j/internal/config"
 )
 
 type Server struct {
-	gpt *GPT.GPT
-	ctx context.Context
+	gpt    *GPT.GPT
+	ctx    context.Context
+	config *config.ChatServer
 }
 
-func NewServer(gpt *GPT.GPT, ctx context.Context) *Server {
+func NewServer(gpt *GPT.GPT, ctx context.Context, config *config.ChatServer) *Server {
 	return &Server{
-		gpt: gpt,
-		ctx: ctx,
+		gpt:    gpt,
+		ctx:    ctx,
+		config: config,
 	}
 }
 
@@ -26,6 +29,9 @@ func (s *Server) Run() {
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
@@ -53,7 +59,7 @@ func (s *Server) Run() {
 		}
 	})
 
-	err := http.ListenAndServe(":8081", nil)
+	err := http.ListenAndServe(":"+s.config.Port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

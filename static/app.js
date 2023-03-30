@@ -1,22 +1,52 @@
-// Create WebSocket connection.
-const socket = new WebSocket("ws://localhost:8081/ws");
+const toastMe = `<div class="clearfix">
+    <div class="toast fade show float-end" role="alert">
+        <div class="toast-header">
+            <i class="bi bi-person-workspace me-2"></i>
+            <strong class="me-auto">Me</strong>
+            <small>11 mins ago</small>
+        </div>
+        <div class="toast-body bg-success bg-opacity-25">
+            {{words}}
+        </div>
+    </div>
+</div>`
+const toastHe = `<div class="toast fade show toast-he" role="alert">
+    <div class="toast-header">
+        <i class="bi bi-robot me-2"></i>
+        <strong class="me-auto">Robot J</strong>
+        <small class="text-muted">just now</small>
+    </div>
+    <div class="toast-body">
+        {{words}}
+    </div>
+</div>`
+const chatBox = document.querySelector('#chatBox')
 
-// Connection opened
+const sendMessage = function (message) {
+    chatBox.innerHTML += toastMe.replace('{{words}}', message)
+}
+const messageLoading = function () {
+    chatBox.innerHTML += toastHe.replace('{{words}}', '<span class="loading">...</span>')
+}
+const receivedMessage = function (message) {
+    let toastBody = chatBox.lastChild.querySelector('.toast-body')
+    toastBody.innerHTML = message
+}
+
+const socket = new WebSocket("ws://localhost:8081/ws");
 socket.addEventListener("open", (event) => {
     socket.send("Hello Server!");
 });
-
-// Listen for messages
 socket.addEventListener("message", (event) => {
-    console.log("Message from server ", event.data);
+    console.log(event.data);
+    receivedMessage(event.data)
 });
 
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 // recognition.continuous = true;
-
-var speak = document.querySelector('#speak');
+const speak = document.querySelector('#speak');
 speak.onclick = function () {
     recognition.start();
     console.log('Ready for your speech.');
@@ -25,10 +55,12 @@ speak.onclick = function () {
 
 recognition.onresult = function (event) {
     console.log(event)
-    var last = event.results.length - 1;
-    var text = event.results[last][0].transcript;
+    let last = event.results.length - 1;
+    let text = event.results[last][0].transcript;
     console.log(text)
-    socket.send(text);
+    socket.send(text)
+    sendMessage(text)
+    messageLoading()
 };
 
 recognition.onspeechend = function () {
@@ -66,4 +98,3 @@ const micoff = function () {
     var classVal = icon.getAttribute("class").replace("bi-record-circle", "bi-mic-mute")
     icon.setAttribute("class", classVal)
 }
-

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/llaoj/robot-j/internal/config"
 	openai "github.com/sashabaranov/go-openai"
 )
 
@@ -11,12 +12,11 @@ type GPT struct {
 	client *openai.Client
 }
 
-func NewGPT() *GPT {
-	client := openai.NewClient("")
-	gpt := &GPT{
+func NewGPT(config *config.GPT) *GPT {
+	client := openai.NewClient(config.APIKey)
+	return &GPT{
 		client: client,
 	}
-	return gpt
 }
 
 func (gpt *GPT) CreateChatCompletion(ctx context.Context, content string) string {
