@@ -33,8 +33,7 @@ func (gpt *GPT) CreateChatCompletion(ctx context.Context, content string) string
 		},
 	)
 	if err != nil {
-		fmt.Printf("ChatCompletion error: %v\n", err)
-		return ""
+		return fmt.Sprintf("ChatCompletion error: %v\n", err)
 	}
 	return response.Choices[0].Message.Content
 }

@@ -1,41 +1,52 @@
 const toastMe = `<div class="clearfix">
-    <div class="toast fade show float-end" role="alert">
+    <div class="toast fade show float-end my-2 w-50" role="alert">
         <div class="toast-header">
             <i class="bi bi-person-workspace me-2"></i>
             <strong class="me-auto">Me</strong>
             <small>11 mins ago</small>
         </div>
         <div class="toast-body bg-success bg-opacity-25">
-            {{words}}
+            {{message}}
         </div>
     </div>
 </div>`
-const toastHe = `<div class="toast fade show toast-he" role="alert">
+const toastHe = `<div class="toast fade show my-2 w-50 toast-he" role="alert">
     <div class="toast-header">
         <i class="bi bi-robot me-2"></i>
         <strong class="me-auto">Robot J</strong>
         <small class="text-muted">just now</small>
     </div>
     <div class="toast-body">
-        {{words}}
+        {{message}}
     </div>
 </div>`
 const chatBox = document.querySelector('#chatBox')
 
-const sendMessage = function (message) {
-    chatBox.innerHTML += toastMe.replace('{{words}}', message)
+const waitingMessage = function () {
+    chatBox.innerHTML += toastHe.replace('{{message}}', '<span class="waiting">...</span>')
+    chatBox.scrollTop = chatBox.scrollHeight
 }
-const messageLoading = function () {
-    chatBox.innerHTML += toastHe.replace('{{words}}', '<span class="loading">...</span>')
+const sendMessage = function (message) {
+    chatBox.innerHTML += toastMe.replace('{{message}}', message)
+    chatBox.scrollTop = chatBox.scrollHeight
+    socket.send(message)
+    waitingMessage()
 }
 const receivedMessage = function (message) {
-    let toastBody = chatBox.lastChild.querySelector('.toast-body')
+    let toastBody = chatBox.querySelector('.toast-he:last-child .toast-body')
     toastBody.innerHTML = message
+    chatBox.scrollTop = chatBox.scrollHeight
+}
+const submitTextMessage = function () {
+    let input = document.querySelector('#textMessage')
+    sendMessage(input.value)
+    input.value = ''
+    return false
 }
 
 const socket = new WebSocket("ws://localhost:8081/ws");
 socket.addEventListener("open", (event) => {
-    socket.send("Hello Server!");
+    // socket.send("Hello Server!");
 });
 socket.addEventListener("message", (event) => {
     console.log(event.data);
@@ -57,10 +68,7 @@ recognition.onresult = function (event) {
     console.log(event)
     let last = event.results.length - 1;
     let text = event.results[last][0].transcript;
-    console.log(text)
-    socket.send(text)
     sendMessage(text)
-    messageLoading()
 };
 
 recognition.onspeechend = function () {

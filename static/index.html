@@ -8,13 +8,13 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        .loading {
+        .waiting {
             animation-duration: 2s;
             animation-iteration-count: infinite;
-            animation-name: loading;
+            animation-name: waiting;
         }
 
-        @keyframes loading {
+        @keyframes waiting {
             from {
                 padding-left: 0rem;
             }
@@ -23,47 +23,30 @@
                 padding-left: .5rem;
             }
         }
+
+        .vh-75 {
+            height: 75vh !important;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h3>Hey J</h3>
-
-        <div class="border rounded p-3 my-4" id="chatBox">
-            <div class="clearfix">
-                <div class="toast fade show float-end words-me" role="alert">
-                    <div class="toast-header">
-                        <i class="bi bi-person-workspace me-2"></i>
-                        <strong class="me-auto">Me</strong>
-                        <small>11 mins ago</small>
-                    </div>
-                    <div class="toast-body bg-success bg-opacity-25">
-                        Hello, world! This is a toast message.
-                    </div>
-                </div>
+        <div id="chatBox" class="border rounded p-3 my-4 bg-light vh-75 overflow-auto"></div>
+        <form onsubmit="return submitTextMessage()">
+            <div class="input-group mt-3">
+                <input id="textMessage" type="text" class="form-control form-control-lg" placeholder="Input..."
+                    required>
+                <button class="btn btn-outline-secondary" type="submit">Enter</button>
+                <button id="speak" class="btn btn-outline-secondary" type="button">
+                    <i class="me-1 bi bi-mic-mute"></i>Speak
+                </button>
             </div>
-
-            <div class="toast fade show words-he" role="alert">
-                <div class="toast-header">
-                    <i class="bi bi-robot me-2"></i>
-                    <strong class="me-auto">Robot J</strong>
-                    <small class="text-muted">just now</small>
-                </div>
-                <div class="toast-body">
-                    <span class="loading">...</span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mt-3">
-            <input type="text" class="form-control form-control-lg" placeholder="Input...">
-            <button class="btn btn-outline-secondary" type="button">Enter</button>
-            <button id="speak" class="btn btn-outline-secondary" type="button"><i class="me-1 bi bi-mic-mute"></i>Speak</button>
-        </div>
-
+        </form>
     </div>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js?v=2022033018"></script>
+    <script src="app.js?v=2022033109"></script>
 </body>
 
 </html>
