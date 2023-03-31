@@ -1,5 +1,7 @@
 FROM golang
 
+WORKDIR /app
+
 COPY . .
 
 RUN go get -d -v ./...
