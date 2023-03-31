@@ -59,7 +59,7 @@ func (s *Server) Run() {
 		}
 	})
 
-	err := http.ListenAndServe(":"+s.config.Port, nil)
+	err := http.ListenAndServeTLS(s.config.Addr, s.config.CertFile, s.config.KeyFile, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

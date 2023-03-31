@@ -1,7 +1,9 @@
 package config
 
 type ChatServer struct {
-	Port string `yaml:"port"`
+	Addr     string `yaml:"addr"`
+	CertFile string `yaml:"certFile"`
+	KeyFile  string `yaml:"keyFile"`
 }
 
 type GPT struct {

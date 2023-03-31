@@ -54,37 +54,6 @@ socket.addEventListener("message", (event) => {
 });
 
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-// recognition.continuous = true;
-const speak = document.querySelector('#speak');
-speak.onclick = function () {
-    recognition.start();
-    console.log('Ready for your speech.');
-    micon()
-}
-
-recognition.onresult = function (event) {
-    console.log(event)
-    let last = event.results.length - 1;
-    let text = event.results[last][0].transcript;
-    sendMessage(text)
-};
-
-recognition.onspeechend = function () {
-    recognition.stop();
-    micoff()
-    console.log('Stoped listening.');
-}
-
-recognition.onnomatch = function (event) {
-    console.log('I didnt recognise your speech');
-}
-
-recognition.onerror = function (event) {
-    console.log('Error occurred in recognition: ' + event.error);
-}
-
 const micon = function () {
     var btnSpeak = document.querySelector('#speak')
     btnSpeak.setAttribute('disabled', '')
@@ -95,7 +64,6 @@ const micon = function () {
     classVal = icon.getAttribute("class").replace("bi-mic-mute", "bi-record-circle")
     icon.setAttribute("class", classVal)
 }
-
 const micoff = function () {
     var btnSpeak = document.querySelector('#speak')
     btnSpeak.removeAttribute('disabled')
@@ -105,4 +73,32 @@ const micoff = function () {
     var icon = btnSpeak.querySelector('.bi')
     var classVal = icon.getAttribute("class").replace("bi-record-circle", "bi-mic-mute")
     icon.setAttribute("class", classVal)
+}
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+const speak = document.querySelector('#speak');
+// recognition.continuous = true;
+speak.onclick = function () {
+    recognition.start();
+    console.log('Ready for your speech.');
+    micon()
+}
+recognition.onresult = function (event) {
+    console.log(event)
+    let last = event.results.length - 1;
+    let text = event.results[last][0].transcript;
+    sendMessage(text)
+};
+recognition.onspeechend = function () {
+    console.log('Stoped listening');
+    recognition.stop();
+    micoff()
+}
+recognition.onnomatch = function (event) {
+    console.log('I didnt recognise your speech');
+    micoff()
+}
+recognition.onerror = function (event) {
+    console.log('Error occurred in recognition: ' + event.error);
+    micoff()
 }
