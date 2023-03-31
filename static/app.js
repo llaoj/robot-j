@@ -44,7 +44,7 @@ const submitTextMessage = function () {
     return false
 }
 
-const socket = new WebSocket("ws://localhost:8081/ws");
+const socket = new WebSocket("ws://ec2-43-206-213-103.ap-northeast-1.compute.amazonaws.com/ws");
 socket.addEventListener("open", (event) => {
     // socket.send("Hello Server!");
 });
