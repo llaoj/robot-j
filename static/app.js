@@ -14,7 +14,7 @@ const toastHe = `<div class="toast fade show my-2 w-75 toast-he" role="alert">
         <i class="bi bi-robot me-2"></i>
         <strong class="me-auto">Robot J</strong>
     </div>
-    <div class="toast-body" style="white-space:pre-wrap;">
+    <div class="toast-body">
         {{message}}
     </div>
 </div>`
@@ -55,7 +55,7 @@ const speak = function (message) {
 
 const waitingMessage = function () {
     disableInput()
-    chatBox.innerHTML += toastHe.replace('{{message}}', '<span class="waiting">...</span>')
+    chatBox.innerHTML += toastHe.replace('{{message}}', '<p class="waiting">...</p>')
     chatBox.scrollTop = chatBox.scrollHeight
 }
 const sendMessage = function (message) {
@@ -66,7 +66,7 @@ const sendMessage = function (message) {
 }
 const receivedMessage = function (message) {
     let toastBody = chatBox.querySelector('.toast-he:last-child .toast-body')
-    toastBody.innerHTML = message
+    toastBody.innerHTML = '<div style="white-space:pre-line;">' + message + '</div>'
     chatBox.scrollTop = chatBox.scrollHeight
     enableInput()
     speak(message)

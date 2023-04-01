@@ -9,18 +9,22 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .waiting {
-            animation-duration: 2s;
+            margin: 0;
+            font-size: 22px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation-duration: 3s;
             animation-iteration-count: infinite;
-            animation-name: waiting;
+            animation-name: typing;
         }
 
-        @keyframes waiting {
+        @keyframes typing {
             from {
-                padding-left: 0rem;
+                width: 0;
             }
 
             to {
-                padding-left: .5rem;
+                width: 15px;
             }
         }
 
@@ -47,7 +51,7 @@
         <div class="text-muted fs-6 fw-light my-2">Powered by GPT3Dot5Turbo</div>
     </div>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js?v=20220401"></script>
+    <script src="app.js?v=2022040109"></script>
 </body>
 
 </html>
