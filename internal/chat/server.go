@@ -50,8 +50,8 @@ func (s *Server) Run() {
 			}
 
 			fmt.Println(string(messageContent))
-			// timeReceive := time.Now()
 			messageResponse := s.gpt.CreateChatCompletion(s.ctx, string(messageContent))
+			fmt.Println(messageResponse)
 			if err := conn.WriteMessage(messageType, []byte(messageResponse)); err != nil {
 				log.Println(err)
 				return
@@ -59,8 +59,10 @@ func (s *Server) Run() {
 		}
 	})
 
+	// err := http.ListenAndServe(s.config.Addr, nil)
 	err := http.ListenAndServeTLS(s.config.Addr, s.config.CertFile, s.config.KeyFile, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Chat server is running at", s.config.Addr)
 }

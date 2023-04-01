@@ -32,22 +32,22 @@
 
 <body>
     <div class="container">
-        <h3>Hey J</h3>
+        <h3 class="mt-4">Hey J</h3>
         <div id="chatBox" class="border rounded p-3 my-4 bg-light vh-75 overflow-auto"></div>
         <form onsubmit="return submitTextMessage()">
             <div class="input-group mt-3">
                 <input id="textMessage" type="text" class="form-control form-control-lg" placeholder="Input..."
                     required>
-                <button class="btn btn-outline-secondary" type="submit">Enter</button>
-                <button id="speak" class="btn btn-outline-secondary" type="button">
-                    <i class="me-1 bi bi-mic-mute"></i>Speak
+                <button id="sendText" class="btn btn-outline-secondary" type="submit">Enter</button>
+                <button id="talk" class="btn btn-outline-secondary" type="button">
+                    <i class="me-1 bi bi-mic-mute"></i>Talk
                 </button>
             </div>
         </form>
         <div class="text-muted fs-6 fw-light my-2">Powered by GPT3Dot5Turbo</div>
     </div>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js?v=2022033109"></script>
+    <script src="app.js?v=20220401"></script>
 </body>
 
 </html>

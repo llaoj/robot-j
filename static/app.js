@@ -3,26 +3,58 @@ const toastMe = `<div class="clearfix">
         <div class="toast-header">
             <i class="bi bi-person-workspace me-2"></i>
             <strong class="me-auto">Me</strong>
-            <small>11 mins ago</small>
         </div>
         <div class="toast-body bg-success bg-opacity-25">
             {{message}}
         </div>
     </div>
 </div>`
-const toastHe = `<div class="toast fade show my-2 w-50 toast-he" role="alert">
+const toastHe = `<div class="toast fade show my-2 w-75 toast-he" role="alert">
     <div class="toast-header">
         <i class="bi bi-robot me-2"></i>
         <strong class="me-auto">Robot J</strong>
-        <small class="text-muted">just now</small>
     </div>
-    <div class="toast-body">
+    <div class="toast-body" style="white-space:pre-wrap;">
         {{message}}
     </div>
 </div>`
 const chatBox = document.querySelector('#chatBox')
+const btnSendText = document.querySelector('#sendText')
+const btnTalk = document.querySelector('#talk')
+
+const disableInput = function () {
+    btnSendText.setAttribute('disabled', '')
+    btnTalk.setAttribute('disabled', '')
+}
+const enableInput = function () {
+    btnSendText.removeAttribute('disabled')
+    btnTalk.removeAttribute('disabled')
+}
+const micon = function () {
+    let classVal = btnTalk.getAttribute("class").replace("btn-outline-secondary", "btn-outline-danger")
+    btnTalk.setAttribute("class", classVal)
+    let icon = btnTalk.querySelector('.bi')
+    classVal = icon.getAttribute("class").replace("bi-mic-mute", "bi-record-circle")
+    icon.setAttribute("class", classVal)
+}
+const micoff = function () {
+    let classVal = btnTalk.getAttribute("class").replace("btn-outline-danger", "btn-outline-secondary")
+    btnTalk.setAttribute("class", classVal)
+    let icon = btnTalk.querySelector('.bi')
+    classVal = icon.getAttribute("class").replace("bi-record-circle", "bi-mic-mute")
+    icon.setAttribute("class", classVal)
+}
+
+const synthesis = window.speechSynthesis;
+const speak = function (message) {
+    let utterance = new SpeechSynthesisUtterance();
+    utterance.lang = 'zh-TW';
+    utterance.text = message;
+    synthesis.speak(utterance);
+}
 
 const waitingMessage = function () {
+    disableInput()
     chatBox.innerHTML += toastHe.replace('{{message}}', '<span class="waiting">...</span>')
     chatBox.scrollTop = chatBox.scrollHeight
 }
@@ -36,6 +68,8 @@ const receivedMessage = function (message) {
     let toastBody = chatBox.querySelector('.toast-he:last-child .toast-body')
     toastBody.innerHTML = message
     chatBox.scrollTop = chatBox.scrollHeight
+    enableInput()
+    speak(message)
 }
 const submitTextMessage = function () {
     let input = document.querySelector('#textMessage')
@@ -53,35 +87,14 @@ socket.addEventListener("message", (event) => {
     receivedMessage(event.data)
 });
 
-
-const micon = function () {
-    var btnSpeak = document.querySelector('#speak')
-    btnSpeak.setAttribute('disabled', '')
-    var classVal = btnSpeak.getAttribute("class").replace("btn-outline-secondary", "btn-outline-danger")
-    btnSpeak.setAttribute("class", classVal)
-
-    var icon = btnSpeak.querySelector('.bi')
-    classVal = icon.getAttribute("class").replace("bi-mic-mute", "bi-record-circle")
-    icon.setAttribute("class", classVal)
-}
-const micoff = function () {
-    var btnSpeak = document.querySelector('#speak')
-    btnSpeak.removeAttribute('disabled')
-    var classVal = btnSpeak.getAttribute("class").replace("btn-outline-danger", "btn-outline-secondary")
-    btnSpeak.setAttribute("class", classVal)
-
-    var icon = btnSpeak.querySelector('.bi')
-    var classVal = icon.getAttribute("class").replace("bi-record-circle", "bi-mic-mute")
-    icon.setAttribute("class", classVal)
-}
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
-const speak = document.querySelector('#speak');
-// recognition.continuous = true;
-speak.onclick = function () {
+btnTalk.onclick = function () {
+    // recognition.continuous = true;
     recognition.start();
     console.log('Ready for your speech.');
     micon()
+    disableInput()
 }
 recognition.onresult = function (event) {
     console.log(event)
